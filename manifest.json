@@ -4,9 +4,21 @@
   "version": "2026.9.23",
   "version_name": "2026.09.23",
   "description": "Exibe e filtra as descricoes dos erros na busca de peticionamentos do Solar.",
+  "icons": {
+    "16": "icons/icon-16.png",
+    "32": "icons/icon-32.png",
+    "48": "icons/icon-48.png",
+    "128": "icons/icon-128.png"
+  },
   "permissions": ["storage"],
   "action": {
     "default_title": "Solar - Ajuda",
+    "default_icon": {
+      "16": "icons/icon-16.png",
+      "32": "icons/icon-32.png",
+      "48": "icons/icon-48.png",
+      "128": "icons/icon-128.png"
+    },
     "default_popup": "popup.html"
   },
   "content_scripts": [
