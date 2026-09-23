@@ -1,0 +1,23 @@
+{
+  "manifest_version": 3,
+  "name": "Solar - Ajuda",
+  "version": "2026.9.23",
+  "version_name": "2026.09.23",
+  "description": "Exibe e filtra as descricoes dos erros na busca de peticionamentos do Solar.",
+  "permissions": ["storage"],
+  "action": {
+    "default_title": "Solar - Ajuda",
+    "default_popup": "popup.html"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "http://*/processo/peticionamento/buscar/*",
+        "https://*/processo/peticionamento/buscar/*"
+      ],
+      "css": ["styles.css"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ]
+}

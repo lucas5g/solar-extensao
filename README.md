@@ -10,6 +10,7 @@ Extensao para Chrome e Edge que melhora a pagina
 - Filtra os processos por descricao do erro.
 - Mantem a linha de documentos vinculada ao processo durante a filtragem.
 - Atualiza o filtro quando a tabela muda por busca, paginacao ou AJAX.
+- Permite habilitar ou desabilitar os recursos pelo icone da extensao.
 
 ## Instalacao
 
