@@ -16,6 +16,17 @@
     return value.trim().replace(/\s+/g, " ");
   }
 
+  function getErrorType(description) {
+    return normalizeDescription(
+      description
+        .replace(/\s*\[Identificador:\s*[^\]]*\]\s*$/i, "")
+        .replace(
+          /\b(O expediente)\s+\d+(\s+não pode ser respondido\b)/gi,
+          "$1 {número}$2"
+        )
+    );
+  }
+
   function getErrorRows(table) {
     return Array.from(table.querySelectorAll("tbody > tr.error")).filter(
       (row) =>
@@ -45,10 +56,12 @@
 
     if (!error) {
       delete row.dataset.solarErrorDescription;
+      delete row.dataset.solarErrorType;
       return null;
     }
 
     row.dataset.solarErrorDescription = error.description;
+    row.dataset.solarErrorType = getErrorType(error.description);
     const container = error.badge.parentElement;
     container.classList.add("solar-error-status");
 
@@ -66,7 +79,7 @@
       descriptionElement.textContent = error.description;
     }
 
-    return error.description;
+    return row.dataset.solarErrorType;
   }
 
   function getDetailsRow(row) {
@@ -108,12 +121,12 @@
     return state;
   }
 
-  function updateOptions(state, descriptions) {
+  function updateOptions(state, errorTypes) {
     const counts = new Map();
 
-    descriptions.forEach((description) => {
-      if (description) {
-        counts.set(description, (counts.get(description) || 0) + 1);
+    errorTypes.forEach((errorType) => {
+      if (errorType) {
+        counts.set(errorType, (counts.get(errorType) || 0) + 1);
       }
     });
 
@@ -127,10 +140,10 @@
     }
 
     const currentValue = state.select.value;
-    const allOption = new Option(`Todos os erros (${descriptions.length})`, "");
+    const allOption = new Option(`Todos os erros (${errorTypes.length})`, "");
     const options = entries.map(
-      ([description, quantity]) =>
-        new Option(`${description} (${quantity})`, description)
+      ([errorType, quantity]) =>
+        new Option(`${errorType} (${quantity})`, errorType)
     );
 
     state.select.replaceChildren(allOption, ...options);
@@ -140,13 +153,12 @@
 
   function applyFilter(table, state) {
     const rows = getErrorRows(table);
-    const selectedDescription = state.select.value;
+    const selectedType = state.select.value;
     let visibleCount = 0;
 
     rows.forEach((row) => {
       const visible =
-        !selectedDescription ||
-        row.dataset.solarErrorDescription === selectedDescription;
+        !selectedType || row.dataset.solarErrorType === selectedType;
       const detailsRow = getDetailsRow(row);
 
       row.classList.toggle(HIDDEN_CLASS, !visible);
@@ -177,8 +189,8 @@
     const state = existingState?.toolbar.isConnected
       ? existingState
       : createToolbar(table);
-    const descriptions = rows.map(addDescription);
-    updateOptions(state, descriptions);
+    const errorTypes = rows.map(addDescription);
+    updateOptions(state, errorTypes);
     applyFilter(table, state);
   }
 
@@ -229,9 +241,12 @@
     document.querySelectorAll(".solar-error-status").forEach((container) => {
       container.classList.remove("solar-error-status");
     });
-    document.querySelectorAll("[data-solar-error-description]").forEach((row) => {
-      delete row.dataset.solarErrorDescription;
-    });
+    document
+      .querySelectorAll("[data-solar-error-description], [data-solar-error-type]")
+      .forEach((row) => {
+        delete row.dataset.solarErrorDescription;
+        delete row.dataset.solarErrorType;
+      });
     document.querySelectorAll(`.${HIDDEN_CLASS}`).forEach((row) => {
       row.classList.remove(HIDDEN_CLASS);
     });

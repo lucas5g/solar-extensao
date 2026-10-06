@@ -12,6 +12,16 @@ Extensao para Chrome e Edge que melhora a pagina
 - Atualiza o filtro quando a tabela muda por busca, paginacao ou AJAX.
 - Permite habilitar ou desabilitar os recursos pelo icone da extensao.
 
+## Agrupamento de erros
+
+O filtro agrupa mensagens que diferem apenas no sufixo `[Identificador: ...]`
+ou no numero da frase `O expediente {número} não pode ser respondido`.
+Cada opcao mostra a quantidade total de registros do grupo. Motivos diferentes
+e outros numeros de processo ou documento continuam separados.
+
+A descricao completa, incluindo o numero do expediente e o identificador,
+continua visivel em cada linha e no tooltip. `Todos os erros` conta registros.
+
 ## Instalacao
 
 1. Abra `chrome://extensions` no Chrome ou `edge://extensions` no Edge.
